@@ -136,7 +136,7 @@
       letter-spacing: 3px;
     }
 
-    /* center section - input centered vertically */
+    /* center section - input with button edge to edge */
     .center-section {
       flex-shrink: 0;
       display: flex;
@@ -146,23 +146,76 @@
 
     #formSection {
       width: 100%;
+      position: relative;
     }
 
-    input {
-      width: 100%;
-      font-family: "Orbitron", sans-serif;
+    /* input + button edge-to-edge */
+    .input-group {
+      display: flex;
       border-radius: 14px;
-      padding: 20px 20px;
+      overflow: hidden;
       border: 1px solid #2a2a2a;
       background: #050505;
+      transition: border-color 0.2s;
+    }
+
+    .input-group:focus-within {
+      border-color: #555;
+    }
+
+    .input-group input {
+      flex: 1;
+      min-width: 0;
+      font-family: "Orbitron", sans-serif;
+      padding: 20px 20px;
+      border: none;
+      background: transparent;
       color: #fff;
       outline: none;
       font-size: 18px;
       letter-spacing: 1px;
     }
 
-    input:focus {
-      border-color: #555;
+    .input-group input::placeholder {
+      color: #555;
+    }
+
+    .input-group .gen-btn {
+      flex-shrink: 0;
+      font-family: "Orbitron", sans-serif;
+      border: none;
+      background: #fff;
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      padding: 0 22px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-group .gen-btn:active {
+      transform: scale(0.94);
+      background: #eee;
+    }
+
+    .input-group .gen-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      transform: scale(0);
+      animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
 
     /* QR section - organized and clean */
@@ -284,71 +337,9 @@
       width: 100%;
     }
 
-    /* ===== FIXED BUTTON ===== */
+    /* ===== FIXED BUTTON (hidden, replaced by inline) ===== */
     .button-wrapper {
-      flex-shrink: 0;
-      padding: 0 12px 20px;
-      width: 100%;
-      max-width: 440px;
-      margin: 0 auto;
-      position: sticky;
-      bottom: 0;
-      background: transparent;
-      z-index: 10;
-    }
-
-    .button-wrapper button {
-      width: 100%;
-      font-family: "Orbitron", sans-serif;
-      border-radius: 14px;
-      padding: 20px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      font-size: 18px;
-      letter-spacing: 2px;
-      font-weight: 700;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Button click animation */
-    .button-wrapper button:active {
-      transform: scale(0.92);
-      transition-duration: 0.1s;
-    }
-
-    .button-wrapper button .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transform: scale(0);
-      animation: rippleAnim 0.6s linear;
-      pointer-events: none;
-    }
-
-    @keyframes rippleAnim {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-
-    .button-wrapper button:hover {
-      transform: scale(0.98);
-      opacity: 0.9;
-    }
-
-    .generate {
-      background: #fff;
-      color: #000;
-    }
-
-    .another {
-      background: #141414;
-      color: #fff;
-      border: 1px solid #333;
-      display: none;
+      display: none; /* hidden, we use inline button */
     }
 
     /* ===== CUSTOM POPUP ===== */
@@ -445,6 +436,51 @@
       transform: scale(0.92);
     }
 
+    /* "GENERATE ANOTHER QR" - standalone button (shown after generation) */
+    .another-wrapper {
+      flex-shrink: 0;
+      padding: 0 12px 20px;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      position: sticky;
+      bottom: 0;
+      background: transparent;
+      z-index: 10;
+      display: none;
+    }
+
+    .another-wrapper button {
+      width: 100%;
+      font-family: "Orbitron", sans-serif;
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid #333;
+      background: #141414;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 18px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .another-wrapper button:active {
+      transform: scale(0.92);
+      transition-duration: 0.1s;
+    }
+
+    .another-wrapper button .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0);
+      animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+
     /* 20:9 aspect ratio optimization */
     @media (max-aspect-ratio: 20/9) {
       .container {
@@ -453,7 +489,8 @@
       h2 { font-size: 26px; letter-spacing: 4px; }
       .subtitle { font-size: 11px; margin-top: 6px; }
       .header-section { margin-bottom: 12px; }
-      input { padding: 16px 16px; font-size: 17px; }
+      .input-group input { padding: 16px 16px; font-size: 17px; }
+      .input-group .gen-btn { font-size: 12px; padding: 0 16px; }
       .qr-holder canvas,
       .qr-holder svg {
         width: 300px !important;
@@ -463,8 +500,8 @@
       .qr-frame { padding: 10px; }
       .current-amount { font-size: 15px; margin-top: 12px; }
       .footer { font-size: 10px; margin-top: 14px; }
-      .button-wrapper button { padding: 16px; font-size: 16px; }
-      .button-wrapper { padding: 0 8px 14px; }
+      .another-wrapper button { padding: 16px; font-size: 16px; }
+      .another-wrapper { padding: 0 8px 14px; }
       .popup { padding: 28px 24px 24px; }
       .popup-title { font-size: 20px; }
       .popup-message { font-size: 13px; }
@@ -482,11 +519,12 @@
         height: 240px !important;
         padding: 12px;
       }
-      input { padding: 12px; font-size: 15px; }
-      .button-wrapper button { padding: 14px; font-size: 14px; }
+      .input-group input { padding: 12px; font-size: 15px; }
+      .input-group .gen-btn { font-size: 10px; padding: 0 12px; }
       .qr-frame { padding: 8px; }
       .popup { padding: 24px 20px 20px; }
       .popup-title { font-size: 18px; }
+      .another-wrapper button { padding: 14px; font-size: 14px; }
     }
   </style>
 </head>
@@ -495,20 +533,23 @@
 <div class="wrapper">
   <div class="container">
 
-    <!-- Header - now part of centered content -->
+    <!-- Header -->
     <div class="header-section">
       <h2>AMIT DAS</h2>
       <div class="subtitle">SECURE UPI PAYMENT</div>
     </div>
 
-    <!-- Center section - input centered vertically -->
+    <!-- Center section: input with edge-to-edge button -->
     <div class="center-section">
       <div id="formSection">
-        <input type="number" id="amount" placeholder="ENTER AMOUNT IN INR">
+        <div class="input-group">
+          <input type="number" id="amount" placeholder="ENTER AMOUNT IN INR">
+          <button class="gen-btn" id="mainActionBtn" onclick="handleGenerate(event)">GENERATE QR</button>
+        </div>
       </div>
     </div>
 
-    <!-- QR section - clean and organized -->
+    <!-- QR section -->
     <div class="qr-section">
       <div id="qrcode"></div>
       <div class="footer">UPI ID : amitdaskishanganj-8@oksbi</div>
@@ -516,10 +557,9 @@
 
   </div>
 
-  <!-- FIXED BUTTON - locked at bottom -->
-  <div class="button-wrapper">
-    <button class="generate" id="mainActionBtn" onclick="handleGenerate()">GENERATE QR</button>
-    <button class="another" id="anotherBtn" onclick="resetQR()">GENERATE ANOTHER QR</button>
+  <!-- "GENERATE ANOTHER QR" button (hidden initially) -->
+  <div class="another-wrapper" id="anotherWrapper">
+    <button id="anotherBtn" onclick="resetQR()">GENERATE ANOTHER QR</button>
   </div>
 </div>
 
@@ -601,6 +641,7 @@
 
     qrContainer.appendChild(frame);
 
+    // Better SVG rendering with high quality
     qrInstance = new QRCodeStyling({
       width: 1200,
       height: 1200,
@@ -635,27 +676,23 @@
 
     qrInstance.append(qrHolder);
 
-    // Toggle visibility - hide input, show QR
+    // Toggle visibility - hide input, show QR and "another" button
     document.getElementById('formSection').style.display = 'none';
-    document.getElementById('mainActionBtn').style.display = 'none';
-    document.getElementById('anotherBtn').style.display = 'block';
+    document.getElementById('anotherWrapper').style.display = 'block';
   }
 
   function resetQR() {
     document.getElementById('amount').value = '';
     document.getElementById('qrcode').innerHTML = '';
     document.getElementById('formSection').style.display = 'block';
-    document.getElementById('mainActionBtn').style.display = 'block';
-    document.getElementById('anotherBtn').style.display = 'none';
+    document.getElementById('anotherWrapper').style.display = 'none';
     qrInstance = null;
     currentAmount = '';
   }
 
-  // Add ripple to all buttons
-  document.querySelectorAll('.button-wrapper button').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      createRipple(e, this);
-    });
+  // Add ripple to "another" button
+  document.getElementById('anotherBtn').addEventListener('click', function(e) {
+    createRipple(e, this);
   });
 </script>
 

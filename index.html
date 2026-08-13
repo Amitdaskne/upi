@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>UPI QR | AMIT DAS</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,17 +20,21 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
     body {
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      overflow: hidden;
+      padding: 12px 12px 0;
       font-family: "Orbitron", sans-serif;
       background: #000;
       color: #fff;
       position: relative;
+      overflow: hidden;
     }
 
     /* grid & scan effects */
@@ -43,6 +47,7 @@
         linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
       background-size: 32px 32px;
       animation: gridMove 10s linear infinite;
+      pointer-events: none;
     }
 
     body:after {
@@ -64,11 +69,21 @@
       to { transform: translateY(100%); }
     }
 
-    /* container */
-    .container {
+    /* main wrapper - full height with flex */
+    .wrapper {
       width: 100%;
-      max-width: 420px;
-      padding: 30px 24px;
+      max-width: 440px;
+      height: 100%;
+      max-height: 900px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* container — scrollable content area with centered input */
+    .container {
+      flex: 1;
+      padding: 20px 28px 20px;
       position: relative;
       background: rgba(8, 8, 8, .92);
       border: 1px solid rgba(255, 255, 255, .12);
@@ -84,6 +99,11 @@
       );
       box-shadow: 0 0 25px rgba(255, 255, 255, .08);
       backdrop-filter: blur(20px);
+      overflow-y: auto;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .container:before {
@@ -95,81 +115,89 @@
       clip-path: inherit;
     }
 
+    /* header section - now part of centered content */
+    .header-section {
+      flex-shrink: 0;
+      margin-bottom: 16px;
+    }
+
     h2 {
       text-align: center;
-      font-size: 32px;
+      font-size: 34px;
       letter-spacing: 6px;
       font-weight: 900;
     }
 
     .subtitle {
       text-align: center;
-      margin-top: 12px;
+      margin-top: 8px;
       color: #8a8a8a;
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 3px;
     }
 
-    #formSection {
-      margin-top: 28px;
+    /* center section - input centered vertically */
+    .center-section {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    input, button {
+    #formSection {
       width: 100%;
-      font-family: "Orbitron", sans-serif;
-      border-radius: 14px;
     }
 
     input {
-      padding: 18px;
+      width: 100%;
+      font-family: "Orbitron", sans-serif;
+      border-radius: 14px;
+      padding: 20px 20px;
       border: 1px solid #2a2a2a;
       background: #050505;
       color: #fff;
       outline: none;
+      font-size: 18px;
+      letter-spacing: 1px;
     }
 
-    button {
-      padding: 16px;
-      margin-top: 14px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    input:focus {
+      border-color: #555;
     }
 
-    button:hover {
-      transform: scale(0.98);
-      opacity: 0.9;
-    }
-
-    .generate {
-      background: #fff;
-      color: #000;
-    }
-
-    .another {
-      background: #141414;
-      color: #fff;
-      border: 1px solid #333;
-      display: none;
+    /* QR section - organized and clean */
+    .qr-section {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 0;
+      margin-top: 8px;
     }
 
     #qrcode {
-      margin-top: 28px;
+      width: 100%;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
 
     /* ===== UNIQUE QR REVEAL ANIMATION (2s) ===== */
     .qr-frame {
       position: relative;
-      padding: 16px;
-      border: 1px solid rgba(255, 255, 255, .15);
-      border-radius: 22px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 16px;
       background: #050505;
       transform-origin: center center;
       animation: uniqueReveal 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       will-change: transform, opacity, filter, clip-path;
       backface-visibility: hidden;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      width: auto;
     }
 
     @keyframes uniqueReveal {
@@ -208,24 +236,31 @@
     .qr-holder {
       display: flex;
       justify-content: center;
+      align-items: center;
+      line-height: 0;
     }
 
     .qr-holder canvas,
     .qr-holder svg {
-      width: 270px !important;
-      height: 270px !important;
-      background: #fff;
-      padding: 10px;
+      width: 340px !important;
+      height: 340px !important;
+      background: #ffffff;
+      padding: 16px;
       border-radius: 12px;
+      display: block;
+      image-rendering: auto;
     }
 
     .current-amount {
-      margin-top: 18px;
+      margin-top: 14px;
       text-align: center;
       font-size: 18px;
       letter-spacing: 3px;
       opacity: 0;
       animation: fadeInAmount 1.5s ease 0.5s forwards;
+      color: #fff;
+      font-weight: 500;
+      width: 100%;
     }
 
     @keyframes fadeInAmount {
@@ -240,44 +275,310 @@
     }
 
     .footer {
-      margin-top: 24px;
+      margin-top: 16px;
       text-align: center;
       color: #666;
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 2px;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    /* ===== FIXED BUTTON ===== */
+    .button-wrapper {
+      flex-shrink: 0;
+      padding: 0 12px 20px;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      position: sticky;
+      bottom: 0;
+      background: transparent;
+      z-index: 10;
+    }
+
+    .button-wrapper button {
+      width: 100%;
+      font-family: "Orbitron", sans-serif;
+      border-radius: 14px;
+      padding: 20px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 18px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Button click animation */
+    .button-wrapper button:active {
+      transform: scale(0.92);
+      transition-duration: 0.1s;
+    }
+
+    .button-wrapper button .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .button-wrapper button:hover {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .generate {
+      background: #fff;
+      color: #000;
+    }
+
+    .another {
+      background: #141414;
+      color: #fff;
+      border: 1px solid #333;
+      display: none;
+    }
+
+    /* ===== CUSTOM POPUP ===== */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      padding: 20px;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .popup {
+      background: rgba(8, 8, 8, .96);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      max-width: 380px;
+      width: 100%;
+      clip-path: polygon(
+        0 16px,
+        16px 0,
+        calc(100% - 16px) 0,
+        100% 16px,
+        100% calc(100% - 16px),
+        calc(100% - 16px) 100%,
+        16px 100%,
+        0 calc(100% - 16px)
+      );
+      transform: scale(0.8) translateY(30px);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+    }
+
+    .popup-overlay.active .popup {
+      transform: scale(1) translateY(0);
+    }
+
+    .popup-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .popup-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .popup-message {
+      font-size: 14px;
+      color: #aaa;
+      letter-spacing: 1px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-family: "Orbitron", sans-serif;
+    }
+
+    .popup-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 12px;
+      font-family: "Orbitron", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 100%;
+    }
+
+    .popup-btn:hover {
+      transform: scale(0.96);
+      opacity: 0.9;
+    }
+
+    .popup-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* 20:9 aspect ratio optimization */
+    @media (max-aspect-ratio: 20/9) {
+      .container {
+        padding: 16px 18px 14px;
+      }
+      h2 { font-size: 26px; letter-spacing: 4px; }
+      .subtitle { font-size: 11px; margin-top: 6px; }
+      .header-section { margin-bottom: 12px; }
+      input { padding: 16px 16px; font-size: 17px; }
+      .qr-holder canvas,
+      .qr-holder svg {
+        width: 300px !important;
+        height: 300px !important;
+        padding: 14px;
+      }
+      .qr-frame { padding: 10px; }
+      .current-amount { font-size: 15px; margin-top: 12px; }
+      .footer { font-size: 10px; margin-top: 14px; }
+      .button-wrapper button { padding: 16px; font-size: 16px; }
+      .button-wrapper { padding: 0 8px 14px; }
+      .popup { padding: 28px 24px 24px; }
+      .popup-title { font-size: 20px; }
+      .popup-message { font-size: 13px; }
+    }
+
+    @media (max-width: 380px) {
+      .container {
+        padding: 12px 12px 10px;
+      }
+      h2 { font-size: 20px; letter-spacing: 3px; }
+      .header-section { margin-bottom: 10px; }
+      .qr-holder canvas,
+      .qr-holder svg {
+        width: 240px !important;
+        height: 240px !important;
+        padding: 12px;
+      }
+      input { padding: 12px; font-size: 15px; }
+      .button-wrapper button { padding: 14px; font-size: 14px; }
+      .qr-frame { padding: 8px; }
+      .popup { padding: 24px 20px 20px; }
+      .popup-title { font-size: 18px; }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
+<div class="wrapper">
+  <div class="container">
 
-  <h2>AMIT DAS</h2>
-  <div class="subtitle">SECURE UPI PAYMENT</div>
+    <!-- Header - now part of centered content -->
+    <div class="header-section">
+      <h2>AMIT DAS</h2>
+      <div class="subtitle">SECURE UPI PAYMENT</div>
+    </div>
 
-  <div id="formSection">
-    <input type="number" id="amount" placeholder="ENTER AMOUNT IN INR">
-    <button class="generate" onclick="generateQR()">GENERATE QR</button>
+    <!-- Center section - input centered vertically -->
+    <div class="center-section">
+      <div id="formSection">
+        <input type="number" id="amount" placeholder="ENTER AMOUNT IN INR">
+      </div>
+    </div>
+
+    <!-- QR section - clean and organized -->
+    <div class="qr-section">
+      <div id="qrcode"></div>
+      <div class="footer">UPI ID : amitdaskishanganj-8@oksbi</div>
+    </div>
+
   </div>
 
-  <div id="qrcode"></div>
+  <!-- FIXED BUTTON - locked at bottom -->
+  <div class="button-wrapper">
+    <button class="generate" id="mainActionBtn" onclick="handleGenerate()">GENERATE QR</button>
+    <button class="another" id="anotherBtn" onclick="resetQR()">GENERATE ANOTHER QR</button>
+  </div>
+</div>
 
-  <button id="anotherBtn" class="another" onclick="resetQR()">GENERATE ANOTHER QR</button>
-
-  <div class="footer">UPI ID : amitdaskishanganj-8@oksbi</div>
-
+<!-- ===== CUSTOM POPUP ===== -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup">
+    <span class="popup-icon">⚠️</span>
+    <div class="popup-title">INVALID AMOUNT</div>
+    <div class="popup-message">Please enter a valid amount greater than zero.</div>
+    <button class="popup-btn" onclick="closePopup()">UNDERSTOOD</button>
+  </div>
 </div>
 
 <script>
   let qrInstance = null;
   let currentAmount = '';
 
-  function generateQR() {
+  // Ripple effect for buttons
+  function createRipple(e, button) {
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    button.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  // Handle generate with ripple and validation
+  function handleGenerate(e) {
+    const btn = document.getElementById('mainActionBtn');
+    if (e) createRipple(e, btn);
+    
     const amount = document.getElementById('amount').value.trim();
     if (!amount || parseFloat(amount) <= 0) {
-      alert('Please enter a valid amount.');
+      showPopup();
       return;
     }
+    generateQR();
+  }
+
+  // Custom popup functions
+  function showPopup() {
+    document.getElementById('popupOverlay').classList.add('active');
+  }
+
+  function closePopup() {
+    document.getElementById('popupOverlay').classList.remove('active');
+  }
+
+  // Close popup on overlay click
+  document.getElementById('popupOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  function generateQR() {
+    const amount = document.getElementById('amount').value.trim();
     currentAmount = amount;
 
     const upiLink = `upi://pay?pa=amitdaskishanganj-8@oksbi&pn=AMIT%20DAS&am=${amount}&cu=INR`;
@@ -295,7 +596,7 @@
 
     const amountDiv = document.createElement('div');
     amountDiv.className = 'current-amount';
-    amountDiv.textContent = `CURRENT AMOUNT : ₹${amount}`;
+    amountDiv.textContent = `₹${amount}`;
     frame.appendChild(amountDiv);
 
     qrContainer.appendChild(frame);
@@ -305,7 +606,7 @@
       height: 1200,
       type: 'svg',
       data: upiLink,
-      margin: 20,
+      margin: 4,
       qrOptions: {
         errorCorrectionLevel: 'H'
       },
@@ -323,13 +624,20 @@
       cornersDotOptions: {
         type: 'dot',
         color: '#b10020'
+      },
+      imageOptions: {
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        crossOrigin: 'anonymous',
+        margin: 0
       }
     });
 
     qrInstance.append(qrHolder);
 
-    // Toggle visibility
+    // Toggle visibility - hide input, show QR
     document.getElementById('formSection').style.display = 'none';
+    document.getElementById('mainActionBtn').style.display = 'none';
     document.getElementById('anotherBtn').style.display = 'block';
   }
 
@@ -337,10 +645,18 @@
     document.getElementById('amount').value = '';
     document.getElementById('qrcode').innerHTML = '';
     document.getElementById('formSection').style.display = 'block';
+    document.getElementById('mainActionBtn').style.display = 'block';
     document.getElementById('anotherBtn').style.display = 'none';
     qrInstance = null;
     currentAmount = '';
   }
+
+  // Add ripple to all buttons
+  document.querySelectorAll('.button-wrapper button').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      createRipple(e, this);
+    });
+  });
 </script>
 
 </body>
